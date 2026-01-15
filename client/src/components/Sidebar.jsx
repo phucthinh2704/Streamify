@@ -1,7 +1,7 @@
 import { Bell, Home, Users, X } from "lucide-react";
 import { Link, useLocation } from "react-router";
-import { useSidebar } from "../context/SidebarContext";
 import useAuthUser from "../hooks/useAuthUser";
+import useSidebar from "../hooks/useSidebar";
 
 const Sidebar = () => {
 	const { authUser } = useAuthUser();

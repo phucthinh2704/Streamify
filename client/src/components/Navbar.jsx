@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import useLogout from "../hooks/useLogout";
 import ThemeSelector from "./ThemeSelector";
-import { useSidebar } from "../context/SidebarContext";
+import useSidebar from "../hooks/useSidebar";
 
 const Navbar = () => {
 	const { authUser } = useAuthUser();
@@ -88,79 +88,6 @@ const Navbar = () => {
 						<button className="btn btn-ghost btn-circle md:hidden">
 							<Search className="w-5 h-5 text-gray-600" />
 						</button>
-
-						{/* Notifications */}
-						<div className="dropdown dropdown-end">
-							<button
-								tabIndex={0}
-								className="btn btn-ghost btn-circle relative hover:bg-blue-50">
-								<Bell className="w-5 h-5 text-gray-600" />
-								<span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-							</button>
-							<div
-								tabIndex={0}
-								className="dropdown-content mt-3 z-50 card card-compact w-80 bg-white shadow-2xl border border-gray-200">
-								<div className="card-body">
-									<div className="flex items-center justify-between mb-3">
-										<h3 className="font-bold text-lg text-gray-800">
-											Notifications
-										</h3>
-										<span className="badge badge-primary badge-sm">
-											3 new
-										</span>
-									</div>
-									<div className="space-y-3">
-										<div className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
-											<div className="avatar">
-												<div className="w-10 rounded-full">
-													<img
-														src="https://i.pravatar.cc/150?img=5"
-														alt="User"
-													/>
-												</div>
-											</div>
-											<div className="flex-1">
-												<p className="text-sm text-gray-800">
-													<span className="font-semibold">
-														Sarah Chen
-													</span>{" "}
-													sent you a friend request
-												</p>
-												<p className="text-xs text-gray-500 mt-1">
-													2 hours ago
-												</p>
-											</div>
-										</div>
-										<div className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
-											<div className="avatar">
-												<div className="w-10 rounded-full">
-													<img
-														src="https://i.pravatar.cc/150?img=8"
-														alt="User"
-													/>
-												</div>
-											</div>
-											<div className="flex-1">
-												<p className="text-sm text-gray-800">
-													<span className="font-semibold">
-														Mike Rodriguez
-													</span>{" "}
-													liked your post
-												</p>
-												<p className="text-xs text-gray-500 mt-1">
-													5 hours ago
-												</p>
-											</div>
-										</div>
-									</div>
-									<Link
-										to="/notifications"
-										className="btn btn-sm btn-ghost w-full mt-2">
-										View all notifications
-									</Link>
-								</div>
-							</div>
-						</div>
 
 						{/* Theme Selector */}
 						<ThemeSelector />

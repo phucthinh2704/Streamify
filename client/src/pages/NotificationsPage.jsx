@@ -9,9 +9,11 @@ import {
 } from "lucide-react";
 import NoNotificationsFound from "../components/NoNotificationsFound";
 import { acceptFriendRequest, getFriendRequests } from "../lib/api";
+import useAuthUser from "../hooks/useAuthUser";
 
 const NotificationsPage = () => {
 	const queryClient = useQueryClient();
+	const { authUser } = useAuthUser();
 
 	const { data: friendRequests, isLoading } = useQuery({
 		queryKey: ["friendRequests"],
@@ -221,82 +223,79 @@ const NotificationsPage = () => {
 
 									<div className="grid gap-4">
 										{acceptedRequests.map(
-											(notification) => (
-												<div
-													key={notification._id}
-													className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border border-success/20 overflow-hidden group">
-													<div className="absolute inset-0 bg-linear-to-r from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+											(notification) => {
+												const amISender =
+													notification.sender._id ===
+													authUser?._id;
 
-													<div className="card-body p-5 relative">
-														<div className="flex items-start gap-4">
-															<div className="avatar online">
-																<div className="w-14 h-14 rounded-full ring ring-success ring-offset-base-100 ring-offset-2">
-																	<img
-																		src={
-																			notification
-																				.sender
-																				.profilePic
-																		}
-																		alt={
-																			notification
-																				.sender
-																				.fullName
-																		}
-																	/>
-																</div>
-															</div>
+												// Nếu mình là người gửi (A), thì đối phương là Recipient (B)
+												// Nếu mình là người nhận (B), thì đối phương là Sender (A)
+												const otherUser = amISender
+													? notification.recipient
+													: notification.sender;
+												return (
+													<div
+														key={notification._id}
+														className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border border-success/20 overflow-hidden group">
+														<div className="absolute inset-0 bg-linear-to-r from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
-															<div className="flex-1">
-																<div className="flex items-start justify-between gap-4">
-																	<div>
-																		<h3 className="font-bold text-lg">
-																			{
-																				notification
-																					.sender
-																					.fullName
+														<div className="card-body p-5 relative">
+															<div className="flex items-start gap-4">
+																<div className="avatar online">
+																	<div className="w-14 h-14 rounded-full ring ring-success ring-offset-base-100 ring-offset-2">
+																		<img
+																			src={
+																				otherUser?.profilePic
 																			}
-																		</h3>
-																		<p className="text-base-content/80 my-2">
-																			You
-																			have
-																			accepted
-																			the
-																			friend
-																			request
-																			from{" "}
-																			{
-																				notification
-																					.sender
-																					.fullName
+																			alt={
+																				otherUser?.fullName
 																			}
-																		</p>
-																		<div className="flex items-center gap-2 text-sm text-base-content/60">
-																			<Clock className="h-4 w-4" />
-																			{new Date(
-																				notification.createdAt
-																			).toLocaleString(
-																				"en-US",
-																				{
-																					dateStyle:
-																						"medium",
-																					timeStyle:
-																						"short",
-																				}
-																			)}
-																		</div>
+																		/>
 																	</div>
+																</div>
 
-																	<div className="badge badge-success gap-2 py-4 px-4 whitespace-nowrap">
-																		<MessageSquare className="h-4 w-4" />
-																		New
-																		Friend
+																<div className="flex-1">
+																	<div className="flex items-start justify-between gap-4">
+																		<div>
+																			<h3 className="font-bold text-lg">
+																				{
+																					otherUser?.fullName
+																				}
+																			</h3>
+																			<p className="text-base-content/80 my-2">
+																				{amISender
+																					? `${otherUser?.fullName} accepted your friend request`
+																					: `You have accepted the friend request from ${otherUser?.fullName}`}
+																			</p>
+																			<div className="flex items-center gap-2 text-sm text-base-content/60">
+																				<Clock className="h-4 w-4" />
+																				{new Date(
+																					notification.updatedAt ||
+																						notification.createdAt
+																				).toLocaleString(
+																					"en-US",
+																					{
+																						dateStyle:
+																							"medium",
+																						timeStyle:
+																							"short",
+																					}
+																				)}
+																			</div>
+																		</div>
+
+																		<div className="badge badge-success gap-2 py-4 px-4 whitespace-nowrap">
+																			<MessageSquare className="h-4 w-4" />
+																			New
+																			Friend
+																		</div>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
-											)
+												);
+											}
 										)}
 									</div>
 								</section>

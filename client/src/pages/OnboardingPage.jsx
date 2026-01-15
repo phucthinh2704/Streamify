@@ -70,7 +70,7 @@ const OnboardingPage = () => {
 				{/* Header Section */}
 				<div className="text-center mb-12">
 					<div className="inline-flex items-center justify-center p-4 bg-linear-to-br from-primary to-secondary rounded-3xl shadow-2xl mb-6 animate-bounce">
-						<Sparkles className="w-10 h-10 text-white" />
+						<Sparkles className="w-10 h-10 text-secondary" />
 					</div>
 					<h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4">
 						<span className="bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
@@ -141,153 +141,156 @@ const OnboardingPage = () => {
 							<div className="divider">Personal Information</div>
 
 							{/* Form Grid */}
-							<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-								{/* Full Name */}
-								<div className="form-control lg:col-span-2">
-									<label className="label">
-										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<User className="w-4 h-4 text-primary" />
-											Full Name
-										</span>
-									</label>
-									<input
-										type="text"
-										placeholder="Enter your full name"
-										className="input input-bordered input-lg w-full focus:input-primary"
-										value={formState.fullName}
-										onChange={(e) =>
-											setFormState({
-												...formState,
-												fullName: e.target.value,
-											})
-										}
-									/>
-								</div>
-
-								{/* Bio */}
-								<div className="form-control lg:col-span-2">
-									<label className="label">
-										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<BookOpen className="w-4 h-4 text-secondary" />
-											About You
-										</span>
-									</label>
-									<textarea
-										placeholder="Tell us about yourself and your language learning goals..."
-										className="textarea textarea-bordered textarea-lg h-32 w-full focus:textarea-primary resize-none"
-										value={formState.bio}
-										onChange={(e) =>
-											setFormState({
-												...formState,
-												bio: e.target.value,
-											})
-										}
-									/>
-								</div>
-
-								{/* Native Language */}
-								<div className="form-control">
-									<label className="label">
-										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<Globe className="w-4 h-4 text-success" />
-											Native Language
-										</span>
-									</label>
-									<select
-										className="select select-bordered select-lg w-full focus:select-success"
-										value={formState.nativeLanguage}
-										onChange={(e) =>
-											setFormState({
-												...formState,
-												nativeLanguage: e.target.value,
-											})
-										}>
-										<option value="">
-											Select your native language
-										</option>
-										{LANGUAGES.map((lang) => (
-											<option
-												key={`native-${lang}`}
-												value={lang.toLowerCase()}>
-												{lang}
+							<form className="space-y-6" onSubmit={handleSubmit}>
+								<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+									{/* Full Name */}
+									<div className="form-control lg:col-span-2">
+										<label className="label">
+											<span className="label-text font-semibold text-base flex items-center gap-2">
+												<User className="w-4 h-4 text-primary" />
+												Full Name
+											</span>
+										</label>
+										<input
+											type="text"
+											placeholder="Enter your full name"
+											className="input input-bordered input-lg w-full focus:input-primary"
+											value={formState.fullName}
+											onChange={(e) =>
+												setFormState({
+													...formState,
+													fullName: e.target.value,
+												})
+											}
+										/>
+									</div>
+	
+									{/* Bio */}
+									<div className="form-control lg:col-span-2">
+										<label className="label">
+											<span className="label-text font-semibold text-base flex items-center gap-2">
+												<BookOpen className="w-4 h-4 text-secondary" />
+												About You
+											</span>
+										</label>
+										<textarea
+											placeholder="Tell us about yourself and your language learning goals..."
+											className="textarea textarea-bordered textarea-lg h-32 w-full focus:textarea-primary resize-none"
+											value={formState.bio}
+											onChange={(e) =>
+												setFormState({
+													...formState,
+													bio: e.target.value,
+												})
+											}
+										/>
+									</div>
+	
+									{/* Native Language */}
+									<div className="form-control">
+										<label className="label">
+											<span className="label-text font-semibold text-base flex items-center gap-2">
+												<Globe className="w-4 h-4 text-success" />
+												Native Language
+											</span>
+										</label>
+										<select
+											className="select select-bordered select-lg w-full focus:select-success"
+											value={formState.nativeLanguage}
+											onChange={(e) =>
+												setFormState({
+													...formState,
+													nativeLanguage: e.target.value,
+												})
+											}>
+											<option value="">
+												Select your native language
 											</option>
-										))}
-									</select>
-								</div>
-
-								{/* Learning Language */}
-								<div className="form-control">
-									<label className="label">
-										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<Target className="w-4 h-4 text-accent" />
-											Learning Language
-										</span>
-									</label>
-									<select
-										className="select select-bordered select-lg w-full focus:select-accent"
-										value={formState.learningLanguage}
-										onChange={(e) =>
-											setFormState({
-												...formState,
-												learningLanguage:
-													e.target.value,
-											})
-										}>
-										<option value="">
-											Select language you're learning
-										</option>
-										{LANGUAGES.map((lang) => (
-											<option
-												key={`learning-${lang}`}
-												value={lang.toLowerCase()}>
-												{lang}
+											{LANGUAGES.map((lang) => (
+												<option
+													key={`native-${lang}`}
+													value={lang.toLowerCase()}>
+													{lang}
+												</option>
+											))}
+										</select>
+									</div>
+	
+									{/* Learning Language */}
+									<div className="form-control">
+										<label className="label">
+											<span className="label-text font-semibold text-base flex items-center gap-2">
+												<Target className="w-4 h-4 text-accent" />
+												Learning Language
+											</span>
+										</label>
+										<select
+											className="select select-bordered select-lg w-full focus:select-accent"
+											value={formState.learningLanguage}
+											onChange={(e) =>
+												setFormState({
+													...formState,
+													learningLanguage:
+														e.target.value,
+												})
+											}>
+											<option value="">
+												Select language you're learning
 											</option>
-										))}
-									</select>
+											{LANGUAGES.map((lang) => (
+												<option
+													key={`learning-${lang}`}
+													value={lang.toLowerCase()}>
+													{lang}
+												</option>
+											))}
+										</select>
+									</div>
+	
+									{/* Location */}
+									<div className="form-control lg:col-span-2">
+										<label className="label">
+											<span className="label-text font-semibold text-base flex items-center gap-2">
+												<MapPin className="w-4 h-4 text-error" />
+												Location
+											</span>
+										</label>
+										<input
+											type="text"
+											placeholder="City, Country"
+											className="input input-bordered input-lg w-full focus:input-error"
+											value={formState.location}
+											onChange={(e) =>
+												setFormState({
+													...formState,
+													location: e.target.value,
+												})
+											}
+										/>
+									</div>
 								</div>
-
-								{/* Location */}
-								<div className="form-control lg:col-span-2">
-									<label className="label">
-										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<MapPin className="w-4 h-4 text-error" />
-											Location
-										</span>
-									</label>
-									<input
-										type="text"
-										placeholder="City, Country"
-										className="input input-bordered input-lg w-full focus:input-error"
-										value={formState.location}
-										onChange={(e) =>
-											setFormState({
-												...formState,
-												location: e.target.value,
-											})
-										}
-									/>
+	
+								{/* Submit Button */}
+								<div className="pt-6">
+									<button
+										onClick={handleSubmit}
+										disabled={isPending}
+										type="submit"
+										className="btn btn-lg w-full bg-linear-to-r from-indigo-400 to-indigo-600 hover:from-indigo-500 hover:to-indigo-600 text-white border-none shadow-xl hover:shadow-2xl">
+										{isPending ? (
+											<>
+												<Loader2 className="w-5 h-5 animate-spin" />
+												Creating Your Profile...
+											</>
+										) : (
+											<>
+												<Sparkles className="w-5 h-5" />
+												Complete Setup
+											</>
+										)}
+									</button>
 								</div>
-							</div>
-
-							{/* Submit Button */}
-							<div className="pt-6">
-								<button
-									onClick={handleSubmit}
-									disabled={isPending}
-									className="btn btn-lg w-full bg-linear-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white border-none shadow-xl hover:shadow-2xl">
-									{isPending ? (
-										<>
-											<Loader2 className="w-5 h-5 animate-spin" />
-											Creating Your Profile...
-										</>
-									) : (
-										<>
-											<Sparkles className="w-5 h-5" />
-											Complete Setup
-										</>
-									)}
-								</button>
-							</div>
+							</form>
 
 							<p className="text-center text-sm text-base-content/60">
 								You can always update your profile later in

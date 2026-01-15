@@ -10,6 +10,7 @@ import NotificationsPage from "./pages/NotificationsPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import SignUpPage from "./pages/SignUpPage";
 import Layout from "./components/Layout.jsx";
+import FriendsPage from "./pages/FriendsPage";
 import { useThemeStore } from "./store/useThemeStore.jsx";
 function App() {
 	const { authUser, isLoading } = useAuthUser();
@@ -65,6 +66,20 @@ function App() {
 						isAuthenticated && isOnboarded ? (
 							<Layout showSidebar={true}>
 								<NotificationsPage />
+							</Layout>
+						) : (
+							<Navigate
+								to={!isAuthenticated ? "/login" : "/onboarding"}
+							/>
+						)
+					}
+				/>
+				<Route
+					path="/friends"
+					element={
+						isAuthenticated && isOnboarded ? (
+							<Layout showSidebar={true}>
+								<FriendsPage />
 							</Layout>
 						) : (
 							<Navigate

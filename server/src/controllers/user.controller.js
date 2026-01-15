@@ -150,13 +150,23 @@ export async function getFriendRequest(req, res) {
 			"fullName profilePic bio nativeLanguage learningLanguage"
 		);
 
+		// const acceptedRequests = await FriendRequest.find({
+		// 	recipient: req.user.id,
+		// 	status: "accepted",
+		// })
+		// 	.populate("recipient", "fullName profilePic")
+		// 	.populate("sender", "fullName profilePic");
 		const acceptedRequests = await FriendRequest.find({
-			recipient: req.user.id,
+			$or: [
+				{ recipient: req.user.id }, // Trường hợp 1: Mình nhận và đã accept
+				{ sender: req.user.id },    // Trường hợp 2: Mình gửi và họ đã accept
+			],
 			status: "accepted",
 		})
 			.populate("recipient", "fullName profilePic")
-			.populate("sender", "fullName profilePic");
-
+			.populate("sender", "fullName profilePic")
+			.sort({ updatedAt: -1 });
+			
 		res.status(200).json({
 			incomingRequests,
 			acceptedRequests,
