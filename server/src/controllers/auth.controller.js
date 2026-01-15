@@ -131,10 +131,13 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
+	const isProduction = process.env.NODE_ENV === "production";
+
 	res.clearCookie("jwt", {
+		maxAge: 0,
 		httpOnly: true,
-		sameSite: "strict",
-		secure: process.env.NODE_ENV === "production",
+		sameSite: isProduction ? "none" : "strict",
+		secure: isProduction,
 	});
 	return res
 		.status(200)
@@ -142,20 +145,24 @@ export function logout(req, res) {
 }
 
 export function getMe(req, res) {
-	return res
-		.status(200)
-		.json({
-			success: true,
-			user: req.user,
-			message: "User retrieved successfully",
-		});
+	return res.status(200).json({
+		success: true,
+		user: req.user,
+		message: "User retrieved successfully",
+	});
 }
 
 export async function onboard(req, res) {
 	try {
 		const userId = req.user._id;
-		const { fullName, bio, nativeLanguage, learningLanguage, location, profilePic } =
-			req.body;
+		const {
+			fullName,
+			bio,
+			nativeLanguage,
+			learningLanguage,
+			location,
+			profilePic,
+		} = req.body;
 		if (
 			!fullName ||
 			!bio ||
