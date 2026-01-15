@@ -3,15 +3,17 @@ import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import useLogout from "../hooks/useLogout";
 import ThemeSelector from "./ThemeSelector";
+import { useSidebar } from "../context/SidebarContext";
 
 const Navbar = () => {
 	const { authUser } = useAuthUser();
 	const location = useLocation();
 	const isChatPage = location.pathname?.startsWith("/chat");
 	const { logoutMutation } = useLogout();
+	const { toggleSidebar } = useSidebar();
 
 	return (
-		<nav className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+		<nav className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-30 shadow-sm">
 			<div className="container mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex items-center justify-between h-16">
 					{/* LEFT SIDE - Logo */}
@@ -78,18 +80,6 @@ const Navbar = () => {
 								</Link>
 							</div>
 						)}
-					</div>
-
-					{/* CENTER - Search Bar */}
-					<div className="hidden md:flex flex-1 max-w-md mx-8">
-						<div className="relative w-full">
-							<Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-							<input
-								type="text"
-								placeholder="Search users, conversations..."
-								className="input input-bordered w-full pl-12 bg-gray-50 focus:bg-white focus:border-blue-500 transition-all"
-							/>
-						</div>
 					</div>
 
 					{/* RIGHT SIDE - Actions */}
@@ -292,7 +282,9 @@ const Navbar = () => {
 						</div>
 
 						{/* Mobile Menu */}
-						<button className="btn btn-ghost btn-circle lg:hidden">
+						<button
+							className="btn btn-ghost btn-circle lg:hidden"
+							onClick={toggleSidebar}>
 							<Menu className="w-5 h-5 text-gray-600" />
 						</button>
 					</div>

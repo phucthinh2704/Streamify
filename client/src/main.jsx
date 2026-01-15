@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import "stream-chat-react/dist/css/v2/index.css";
+import { SidebarProvider } from "./context/SidebarContext";
 import App from "./App.jsx";
 import "./index.css";
 
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<BrowserRouter>
 			<QueryClientProvider client={queryClient}>
-				<App />
+				<SidebarProvider>
+					<App />
+				</SidebarProvider>
 			</QueryClientProvider>
 		</BrowserRouter>
 	</StrictMode>

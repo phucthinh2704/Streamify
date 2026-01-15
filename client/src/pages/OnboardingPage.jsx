@@ -1,19 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  BookOpen,
-  Camera,
-  Globe,
-  Loader2,
-  MapPin,
-  Shuffle,
-  Sparkles,
-  User,
+	BookOpen,
+	Camera,
+	Globe,
+	Heart,
+	Loader2,
+	MapPin,
+	Shuffle,
+	Sparkles,
+	Target,
+	User,
+	Users,
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { LANGUAGES } from "../constants";
 import useAuthUser from "../hooks/useAuthUser.jsx";
 import { completeOnboarding } from "../lib/api.jsx";
+
 const OnboardingPage = () => {
 	const { authUser } = useAuthUser();
 	const queryClient = useQueryClient();
@@ -33,7 +37,6 @@ const OnboardingPage = () => {
 			toast.success("Profile onboarded successfully");
 			queryClient.invalidateQueries({ queryKey: ["authUser"] });
 		},
-
 		onError: (error) => {
 			toast.error(error.message || "Failed to complete onboarding");
 		},
@@ -41,7 +44,6 @@ const OnboardingPage = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		onboardingMutation(formState);
 	};
 
@@ -52,69 +54,79 @@ const OnboardingPage = () => {
 	};
 
 	return (
-		<div
-			className="min-h-screen bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 px-4"
-			data-theme="light">
-			{/* Background decoration */}
+		<div className="min-h-screen bg-linear-to-br from-primary/5 via-base-100 to-secondary/5">
+			{/* Animated Background */}
 			<div className="fixed inset-0 overflow-hidden pointer-events-none">
-				<div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+				<div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
 				<div
-					className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"
+					className="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse"
 					style={{ animationDelay: "2s" }}></div>
+				<div
+					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent/10 rounded-full blur-3xl animate-pulse"
+					style={{ animationDelay: "4s" }}></div>
 			</div>
 
-			<div className="relative max-w-4xl mx-auto">
-				{/* Header */}
-				<div className="text-center mb-8">
-					<div className="inline-flex items-center justify-center p-3 bg-linear-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg mb-4">
-						<Sparkles className="w-8 h-8 text-white" />
+			<div className="relative container mx-auto px-4 py-8 max-w-6xl">
+				{/* Header Section */}
+				<div className="text-center mb-12">
+					<div className="inline-flex items-center justify-center p-4 bg-linear-to-br from-primary to-secondary rounded-3xl shadow-2xl mb-6 animate-bounce">
+						<Sparkles className="w-10 h-10 text-white" />
 					</div>
-					<h1 className="text-4xl sm:text-5xl font-bold bg-linear-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent mb-3">
-						Complete Your Profile
+					<h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4">
+						<span className="bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+							Welcome to Your Journey
+						</span>
 					</h1>
-					<p className="text-gray-600 text-lg max-w-2xl mx-auto">
-						Let's personalize your experience and connect you with
-						the perfect language partners
+					<p className="text-lg sm:text-xl text-base-content/70 max-w-2xl mx-auto">
+						Let's create your profile and connect you with language
+						partners worldwide
 					</p>
 				</div>
 
-				{/* Main Card */}
-				<div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
-					{/* Progress indicator */}
-					<div className="h-2 bg-gray-100">
-						<div className="h-full bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 w-1/2 transition-all duration-500"></div>
-					</div>
+				{/* Progress Steps */}
+				<div className="mb-8">
+					<ul className="steps steps-horizontal w-full">
+						<li className="step step-primary">Profile Picture</li>
+						<li className="step step-primary">Personal Info</li>
+						<li className="step">Languages</li>
+						<li className="step">Complete</li>
+					</ul>
+				</div>
 
-					<div className="p-8 sm:p-12">
+				{/* Main Form Card */}
+				<div className="card bg-base-100 shadow-2xl border border-base-300">
+					<div className="card-body p-6 sm:p-10">
 						<div className="space-y-8">
 							{/* Profile Picture Section */}
-							<div className="flex flex-col items-center space-y-6">
-								<div className="relative">
-									{/* Avatar container with gradient ring */}
+							<div className="text-center space-y-6">
+								<div className="flex justify-center">
 									<div className="relative">
-										<div className="absolute -inset-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full blur opacity-50"></div>
-										<div className="relative w-32 h-32 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow-xl">
-											{formState.profilePic ? (
-												<img
-													src={formState.profilePic}
-													alt="Profile"
-													className="w-full h-full object-cover"
-												/>
-											) : (
-												<div className="flex items-center justify-center h-full bg-linear-to-br from-blue-100 to-indigo-100">
-													<Camera className="w-12 h-12 text-gray-400" />
+										<div className="absolute -inset-1 bg-linear-to-r from-primary via-secondary to-accent rounded-full blur opacity-75"></div>
+										<div className="relative">
+											<div className="avatar">
+												<div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4">
+													{formState.profilePic ? (
+														<img
+															src={
+																formState.profilePic
+															}
+															alt="Profile"
+														/>
+													) : (
+														<div className="flex items-center justify-center h-full bg-linear-to-br from-primary/20 to-secondary/20">
+															<Camera className="w-16 h-16 text-base-content/50" />
+														</div>
+													)}
 												</div>
-											)}
+											</div>
+											<button
+												type="button"
+												onClick={handleRandomAvatar}
+												className="absolute bottom-2 right-2 btn btn-circle btn-primary btn-sm shadow-lg hover:shadow-xl">
+												<Shuffle className="w-4 h-4" />
+											</button>
 										</div>
 									</div>
-
-									{/* Camera badge */}
-									<button
-										type="button"
-										onClick={handleRandomAvatar}
-										className="absolute bottom-0 right-0 p-2 bg-linear-to-br from-blue-500 to-indigo-600 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110">
-										<Shuffle className="w-4 h-4 text-white" />
-									</button>
 								</div>
 
 								<button
@@ -126,20 +138,22 @@ const OnboardingPage = () => {
 								</button>
 							</div>
 
-							{/* Form Fields */}
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div className="divider">Personal Information</div>
+
+							{/* Form Grid */}
+							<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 								{/* Full Name */}
-								<div className="form-control md:col-span-2">
+								<div className="form-control lg:col-span-2">
 									<label className="label">
 										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<User className="w-4 h-4 text-blue-500" />
+											<User className="w-4 h-4 text-primary" />
 											Full Name
 										</span>
 									</label>
 									<input
 										type="text"
 										placeholder="Enter your full name"
-										className="input input-bordered input-lg w-full bg-gray-50 focus:bg-white focus:border-blue-500 transition-all"
+										className="input input-bordered input-lg w-full focus:input-primary"
 										value={formState.fullName}
 										onChange={(e) =>
 											setFormState({
@@ -151,16 +165,16 @@ const OnboardingPage = () => {
 								</div>
 
 								{/* Bio */}
-								<div className="form-control md:col-span-2">
+								<div className="form-control lg:col-span-2">
 									<label className="label">
 										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<BookOpen className="w-4 h-4 text-indigo-500" />
+											<BookOpen className="w-4 h-4 text-secondary" />
 											About You
 										</span>
 									</label>
 									<textarea
 										placeholder="Tell us about yourself and your language learning goals..."
-										className="textarea textarea-bordered textarea-lg h-28 w-full bg-gray-50 focus:bg-white focus:border-indigo-500 transition-all resize-none"
+										className="textarea textarea-bordered textarea-lg h-32 w-full focus:textarea-primary resize-none"
 										value={formState.bio}
 										onChange={(e) =>
 											setFormState({
@@ -175,12 +189,12 @@ const OnboardingPage = () => {
 								<div className="form-control">
 									<label className="label">
 										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<Globe className="w-4 h-4 text-green-500" />
+											<Globe className="w-4 h-4 text-success" />
 											Native Language
 										</span>
 									</label>
 									<select
-										className="select select-bordered select-lg w-full bg-gray-50 focus:bg-white focus:border-green-500 transition-all"
+										className="select select-bordered select-lg w-full focus:select-success"
 										value={formState.nativeLanguage}
 										onChange={(e) =>
 											setFormState({
@@ -205,12 +219,12 @@ const OnboardingPage = () => {
 								<div className="form-control">
 									<label className="label">
 										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<Sparkles className="w-4 h-4 text-purple-500" />
+											<Target className="w-4 h-4 text-accent" />
 											Learning Language
 										</span>
 									</label>
 									<select
-										className="select select-bordered select-lg w-full bg-gray-50 focus:bg-white focus:border-purple-500 transition-all"
+										className="select select-bordered select-lg w-full focus:select-accent"
 										value={formState.learningLanguage}
 										onChange={(e) =>
 											setFormState({
@@ -233,53 +247,49 @@ const OnboardingPage = () => {
 								</div>
 
 								{/* Location */}
-								<div className="form-control md:col-span-2">
+								<div className="form-control lg:col-span-2">
 									<label className="label">
 										<span className="label-text font-semibold text-base flex items-center gap-2">
-											<MapPin className="w-4 h-4 text-red-500" />
+											<MapPin className="w-4 h-4 text-error" />
 											Location
 										</span>
 									</label>
-									<div className="relative">
-										<MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-										<input
-											type="text"
-											placeholder="City, Country"
-											className="input input-bordered input-lg w-full pl-12 bg-gray-50 focus:bg-white focus:border-red-500 transition-all"
-											value={formState.location}
-											onChange={(e) =>
-												setFormState({
-													...formState,
-													location: e.target.value,
-												})
-											}
-										/>
-									</div>
+									<input
+										type="text"
+										placeholder="City, Country"
+										className="input input-bordered input-lg w-full focus:input-error"
+										value={formState.location}
+										onChange={(e) =>
+											setFormState({
+												...formState,
+												location: e.target.value,
+											})
+										}
+									/>
 								</div>
 							</div>
 
 							{/* Submit Button */}
-							<div className="pt-4">
+							<div className="pt-6">
 								<button
 									onClick={handleSubmit}
 									disabled={isPending}
-									className="btn btn-lg w-full bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white border-none shadow-lg hover:shadow-xl transition-all text-base font-semibold">
+									className="btn btn-lg w-full bg-linear-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white border-none shadow-xl hover:shadow-2xl">
 									{isPending ? (
 										<>
 											<Loader2 className="w-5 h-5 animate-spin" />
-											Completing Profile...
+											Creating Your Profile...
 										</>
 									) : (
 										<>
 											<Sparkles className="w-5 h-5" />
-											Complete Onboarding
+											Complete Setup
 										</>
 									)}
 								</button>
 							</div>
 
-							{/* Help text */}
-							<p className="text-center text-sm text-gray-500 pt-2">
+							<p className="text-center text-sm text-base-content/60">
 								You can always update your profile later in
 								settings
 							</p>
@@ -287,42 +297,48 @@ const OnboardingPage = () => {
 					</div>
 				</div>
 
-				{/* Features showcase */}
-				<div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-					<div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-gray-200">
-						<div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-							<Globe className="w-6 h-6 text-blue-600" />
+				{/* Features Grid */}
+				<div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+					<div className="card bg-linear-to-br from-primary/10 to-primary/5 border border-primary/20 shadow-lg hover:shadow-xl transition-all">
+						<div className="card-body items-center text-center">
+							<div className="p-4 bg-primary/20 rounded-2xl mb-4">
+								<Users className="w-10 h-10 text-primary" />
+							</div>
+							<h3 className="card-title text-xl">
+								Global Community
+							</h3>
+							<p className="text-base-content/70">
+								Connect with learners from around the world
+							</p>
 						</div>
-						<h3 className="font-semibold text-gray-800 mb-1">
-							Global Community
-						</h3>
-						<p className="text-sm text-gray-600">
-							Connect with learners worldwide
-						</p>
 					</div>
 
-					<div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-gray-200">
-						<div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-							<BookOpen className="w-6 h-6 text-indigo-600" />
+					<div className="card bg-linear-to-br from-secondary/10 to-secondary/5 border border-secondary/20 shadow-lg hover:shadow-xl transition-all">
+						<div className="card-body items-center text-center">
+							<div className="p-4 bg-secondary/20 rounded-2xl mb-4">
+								<Target className="w-10 h-10 text-secondary" />
+							</div>
+							<h3 className="card-title text-xl">
+								Practice Together
+							</h3>
+							<p className="text-base-content/70">
+								Learn with native speakers daily
+							</p>
 						</div>
-						<h3 className="font-semibold text-gray-800 mb-1">
-							Learn Together
-						</h3>
-						<p className="text-sm text-gray-600">
-							Practice with native speakers
-						</p>
 					</div>
 
-					<div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-gray-200">
-						<div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-							<Sparkles className="w-6 h-6 text-purple-600" />
+					<div className="card bg-linear-to-br from-accent/10 to-accent/5 border border-accent/20 shadow-lg hover:shadow-xl transition-all">
+						<div className="card-body items-center text-center">
+							<div className="p-4 bg-accent/20 rounded-2xl mb-4">
+								<Heart className="w-10 h-10 text-accent" />
+							</div>
+							<h3 className="card-title text-xl">
+								Track Progress
+							</h3>
+							<p className="text-base-content/70">
+								See your improvement journey
+							</p>
 						</div>
-						<h3 className="font-semibold text-gray-800 mb-1">
-							Track Progress
-						</h3>
-						<p className="text-sm text-gray-600">
-							See your improvement over time
-						</p>
 					</div>
 				</div>
 			</div>
