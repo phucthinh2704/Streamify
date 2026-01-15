@@ -13,6 +13,8 @@ const app = express();
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 // Middleware cơ bản để parse JSON nếu cần
 app.use(express.json());
+
+app.set("trust proxy", 1); // nếu sử dụng proxy ngược như Nginx
 app.use(
 	cors({
 		origin: FRONTEND_URL,
